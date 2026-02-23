@@ -1,3 +1,5 @@
+#Book.py
+
 This project is a simple Flask API for user authentication and book management.
 It allows users to sign up, log in, add books, view all books, delete books, and log out.
 All data is stored locally using JSON files and no database is used.
@@ -16,4 +18,5 @@ The add book endpoint allows logged‑in users to add new books.
 The get all books endpoint returns all stored books.
 The delete book endpoint removes a book by its ID.
 The logout endpoint removes the user key and ends the session.
+
 To run the project, execute the Python file and the Flask server will start on localhost.
