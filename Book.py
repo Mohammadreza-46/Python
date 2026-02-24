@@ -18,9 +18,18 @@ def signup():
     data = request.get_json()
     if data is None or 'password' not in data or 'username' not in data:
         return jsonify({'message': 'not have all'}),400
+    if len(data['username']) < 8:
+        return jsonify({'message': 'username is too short'}),400
     data['key'] = random.randint(1000000000,10000000000000000000000000)
     data['password'] = hash(str(data['password']))
-    file_name = os.path.join(os.path.join(dir_name,'Users'),data['username'])
+    file_name = os.path.join(os.path.join(dir_name,'Users'),data['username'])+'.json'
+    try:
+        with open(file_name,'r') as f:
+            pass
+    except FileNotFoundError:
+        pass
+    else:
+        return jsonify({'message': 'edit username!'}), 400
     with open(file_name,'w') as f:
         f.write(json.dumps(data))
     return jsonify({'message': 'success'})
@@ -31,7 +40,7 @@ def login():
         return jsonify({'message': 'not have all'}),400
     data['password'] = hash(str(data['password']))
     try:
-        file_name = os.path.join(os.path.join(dir_name,'Users'),data['username'])
+        file_name = os.path.join(os.path.join(dir_name,'Users'),data['username'])+'.json'
         with open(file_name,'r') as f:
             json_data = json.loads(f.read())
             if json_data['password'] == data['password'] and json_data['username'] == data['username']:
@@ -51,7 +60,7 @@ def add_book(key):
     try:
         if keys[key]:
             data = request.get_json()
-            if 'book_name' not in data or 'book_content' not in data or 'book_id' not in data or 'writer' not in data or data == None:
+            if data == None or 'book_name' not in data or 'book_content' not in data or 'book_id' not in data or 'writer' not in data:
                 return jsonify({'Not have all!'}), 400
             new_book = {
                 'book_name': data['book_name'],
